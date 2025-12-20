@@ -11,7 +11,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * kolom yang diizinkan untuk diisi sekaligus melalui input.
      *
      * @var list<string>
      */
@@ -23,7 +23,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * kolom yang tidak ikut ditampilkan saat data diubah ke bentuk JSON atau array.
      *
      * @var list<string>
      */
@@ -33,7 +33,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
+     * kolom yang tipe datanya otomatis diubah oleh Laravel.
      *
      * @return array<string, string>
      */
