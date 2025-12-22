@@ -48,6 +48,7 @@
                                 </td>
                                 <td>{{ $b->lokasi }}</td>
                                 <td>
+                                    <!-- TOMBOL AKSI: Detail, Edit, dan Hapus dengan label jelas -->
                                     <div class="d-flex justify-content-center gap-2">
                                         <a href="{{ route('barang.show', $b) }}" 
                                            class="btn btn-sm btn-info text-white" 

@@ -15,6 +15,7 @@ Auth::routes();
 
 Route::middleware('auth')->group(function () {
 
+    // Route untuk menampilkan halaman Dashboard beserta data statistiknya
     Route::get('/dashboard', function () {
         $barangs_count = Barang::count();
         $stok_count = Barang::sum('stok');
@@ -23,7 +24,7 @@ Route::middleware('auth')->group(function () {
         $latest_barangs = Barang::latest()->take(5)->get();
         $updated_barangs = Barang::orderBy('updated_at', 'desc')->take(5)->get();
         
-        // Data for charts
+        // Mengambil data kategori untuk ditampilkan pada chart/grafik
         $categories = Barang::select('kategori', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
             ->groupBy('kategori')
             ->pluck('total', 'kategori')->all();

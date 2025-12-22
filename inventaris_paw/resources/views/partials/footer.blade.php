@@ -1,3 +1,5 @@
+<!-- KOMPONEN FOOTER
+     Menampilkan hak cipta dan link kebijakan privasi di bagian bawah halaman -->
 <footer class="py-4 mt-auto shadow-sm" style="background: linear-gradient(90deg, #0dcaf0 0%, #0d6efd 100%); color: white;">
     <div class="container-fluid px-4">
         <div class="d-flex align-items-center justify-content-between small">

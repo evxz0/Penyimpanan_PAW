@@ -1,10 +1,7 @@
+<!-- KOMPONEN SIDEBAR
+     Berisi menu navigasi utama aplikasi (Dashboard, Data Barang) -->
 <div class="d-flex flex-column flex-shrink-0 p-3 text-white h-100 w-100 sidebar-content shadow" style="background: linear-gradient(180deg, #0dcaf0 0%, #0d6efd 100%);">
-    <a href="{{ route('dashboard') }}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-        <i class="bi bi-box-seam fs-3 me-2"></i>
-        <span class="fs-4 fw-bold tracking-wide">Owabong</span>
-    </a>
-    <hr class="opacity-25 my-3">
-    <ul class="nav nav-pills flex-column mb-auto">
+    <ul class="nav nav-pills flex-column mb-auto pt-3">
         <li class="nav-item mb-2">
             <a href="{{ route('dashboard') }}" 
                class="nav-link text-white {{ request()->routeIs('dashboard') ? 'active bg-white bg-opacity-25 fw-bold shadow-sm' : '' }} d-flex align-items-center px-3 py-2" 

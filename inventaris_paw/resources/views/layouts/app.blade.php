@@ -70,12 +70,12 @@
             @auth
                 <div class="container-fluid">
                     <div class="row">
-                        <!-- Sidebar -->
+                        <!-- SIDEBAR: Bagian kiri halaman, berisi menu navigasi -->
                         <div class="col-md-3 col-lg-2 d-md-block sidebar collapse min-vh-100 p-0" id="sidebarMenu">
                              @include('partials.sidebar')
                         </div>
                         
-                        <!-- Main Content -->
+                        <!-- KONTEN UTAMA: Bagian kanan halaman, berisi konten halaman dan footer -->
                         <div class="col-md-9 ms-sm-auto col-lg-10 bg-light min-vh-100 d-flex flex-column p-0">
                              <div class="flex-grow-1 px-4 py-4">
                                  @yield('content')
