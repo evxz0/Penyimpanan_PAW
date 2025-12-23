@@ -22,7 +22,7 @@
                 </h3>
 
                 <p class="text-muted text-center mb-4">
-                    Untuk terus terhubung dengan sistem manajemen inventaris Owabong
+                    Silahkan login untuk terus terhubung dengan Sistem Manajemen Inventaris Owabong
                 </p>
 
                 <form method="POST" action="{{ route('login') }}">
@@ -73,13 +73,8 @@
                     Tidak memiliki akun?
                 </div>
 
-                <div class="text-center">
-                    <a 
-                        href="{{ route('register') }}" 
-                        class="btn btn-info text-white fw-semibold px-4 py-2"
-                        style="border-radius:999px; min-width:180px;"
-                    >
-                        
-                        Buat akun baru
-                    </a>
-                </div>
+            <div class="text-center mt-3">
+                <a href="{{ route('register') }}" class="btn btn-register">
+                    <i class="bi bi-person-plus me-2"></i> Buat akun baru
+                </a>
+            </div>

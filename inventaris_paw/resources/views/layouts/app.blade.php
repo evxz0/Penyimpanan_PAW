@@ -76,6 +76,21 @@
             background: #00b7e4;
             color: #fff;
         }
+
+        .btn-register {
+            background-color:#006887;
+            color:#ffffff;
+            border-radius:20px;
+            padding: 10px 24px;
+            font-weight:500;
+            font size:14px;
+            border:none;
+        }
+
+        .btn-register:hover {
+            background-color:#00566f;
+            color:#ffffff;
+        }
     </style>
 </head>
 
