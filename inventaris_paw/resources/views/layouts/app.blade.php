@@ -3,106 +3,127 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Sistem Inventaris Owabong') }}</title>
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-</head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container-fluid px-4">
-                <a class="navbar-brand fw-bold text-info" href="{{ url('/') }}">
-                    <i class="bi bi-box-seam"></i> Sistem Inventaris Owabong
-                </a>
-                
-                @auth
-                <button class="btn btn-link text-decoration-none text-dark d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="bi bi-list fs-4"></i>
-                </button>
-                @endauth
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto">
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <main class="py-0">
-            @auth
-                <div class="container-fluid">
-                    <div class="row">
-                        <!-- SIDEBAR: Bagian kiri halaman, berisi menu navigasi -->
-                        <div class="col-md-3 col-lg-2 d-md-block sidebar collapse min-vh-100 p-0" id="sidebarMenu">
-                             @include('partials.sidebar')
-                        </div>
-                        
-                        <!-- KONTEN UTAMA: Bagian kanan halaman, berisi konten halaman dan footer -->
-                        <div class="col-md-9 ms-sm-auto col-lg-10 bg-light min-vh-100 d-flex flex-column p-0">
-                             <div class="flex-grow-1 px-4 py-4">
-                                 @yield('content')
-                             </div>
-                             @include('partials.footer')
-                        </div>
-                    </div>
-                </div>
-            @else
-                <div class="d-flex flex-column min-vh-100">
-                    <div class="flex-grow-1 py-4">
-                        @yield('content')
-                    </div>
-                    @include('partials.footer')
-                </div>
-            @endauth
-        </main>
-    </div>
-    
     <style>
-        .sidebar-content .nav-link {
-            border-radius: 5px;
-            margin-bottom: 5px;
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f6fcff;
         }
-        .sidebar-content .nav-link:hover {
-            background-color: rgba(255,255,255,0.1);
+
+        .login-wrapper {
+            min-height: 100vh;
+        }
+
+        .login-left {
+            background: linear-gradient(180deg, #eaf7fb 0%, #f6fcff 100%);
+        }
+
+        .login-illustration {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .login-card {
+            width: 420px;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+        }
+
+        .login-input {
+            height: 52px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .login-input:focus {
+            border-color: #00b7e4;
+            box-shadow: 0 0 0 3px rgba(0,183,228,.25);
+        }
+
+        .login-btn {
+            height: 52px;
+            border-radius: 12px;
+            font-weight: 600;
+            background: #00b7e4;
+            border: none;
+        }
+
+        .login-btn:hover {
+            background: #009ec5;
+        }
+
+        .btn-outline-login {
+            border-radius: 12px;
+            height: 48px;
+            font-weight: 600;
+            color: #00b7e4;
+            border-color: #00b7e4;
+        }
+
+        .btn-outline-login:hover {
+            background: #00b7e4;
+            color: #fff;
         }
     </style>
+</head>
+
+<body>
+<div id="app">
+
+@auth
+<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand fw-semibold text-info" href="{{ url('/') }}">
+            <i class="bi bi-box-seam"></i> Sistem Inventaris Owabong
+        </a>
+
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                    {{ Auth::user()->name }}
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <a class="dropdown-item"
+                       href="{{ route('logout') }}"
+                       onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                        Logout
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                        @csrf
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<main class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-lg-2 p-0">
+            @include('partials.sidebar')
+        </div>
+
+        <div class="col-md-9 col-lg-10 bg-light min-vh-100 p-4">
+            @yield('content')
+        </div>
+    </div>
+</main>
+@else
+    @yield('content')
+@endauth
+
+</div>
 </body>
 </html>
