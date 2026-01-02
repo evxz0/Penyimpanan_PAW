@@ -8,9 +8,28 @@ use Illuminate\Support\Facades\Auth;
 
 class BarangController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $barangs = Barang::all();
+        $query = Barang::query();
+
+        if ($request->has('sort')) {
+            switch ($request->sort) {
+                case 'name_asc':
+                    $query->orderBy('nama_barang', 'asc');
+                    break;
+                case 'stok_asc':
+                    $query->orderBy('stok', 'asc');
+                    break;
+                case 'stok_desc':
+                    $query->orderBy('stok', 'desc');
+                    break;
+                default:
+                    // Default sorting if needed
+                    break;
+            }
+        }
+
+        $barangs = $query->get();
         return view('barang.index', compact('barangs'));
     }
 
@@ -27,14 +46,18 @@ class BarangController extends Controller
             'kategori'    => 'required',
             'stok'        => 'required|integer',
             'lokasi'      => 'required',
+            'merk'        => 'nullable|string',
+            'status'      => 'required|string',
         ]);
 
-        // Simpan data ke database (FIX error user)
+        // Simpan data ke database
         Barang::create([
             'nama_barang' => $request->nama_barang,
             'kategori'    => $request->kategori,
             'stok'        => $request->stok,
             'lokasi'      => $request->lokasi,
+            'merk'        => $request->merk,
+            'status'      => $request->status,
             'user_id'     => Auth::id(),
         ]);
 
@@ -59,6 +82,8 @@ class BarangController extends Controller
             'kategori'    => 'required',
             'stok'        => 'required|integer',
             'lokasi'      => 'required',
+            'merk'        => 'nullable|string',
+            'status'      => 'required|string',
         ]);
 
         $barang->update([
@@ -66,6 +91,8 @@ class BarangController extends Controller
             'kategori'    => $request->kategori,
             'stok'        => $request->stok,
             'lokasi'      => $request->lokasi,
+            'merk'        => $request->merk,
+            'status'      => $request->status,
         ]);
 
         return redirect()->route('barang.index')
