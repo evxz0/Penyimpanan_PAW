@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Documentation - Sistem Inventaris</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
         body { background-color: #f8f9fa; }
         .method-badge { width: 80px; text-align: center; }
@@ -54,14 +55,36 @@
 }
                 </div>
                 <div class="mt-3">
-                    <button onclick="fetchData()" class="btn btn-primary btn-sm">Coba Langsung (Fetch Data)</button>
+                    <button onclick="fetchData()" class="btn btn-primary btn-sm">
+                        <i class="bi bi-cloud-download"></i> Load Data via API
+                    </button>
+                    <small class="text-muted ms-2">*Klik untuk simulasi Client App mengambil data</small>
                 </div>
                 
-                <!-- Result Container -->
-                <div id="result-container" class="mt-3" style="display:none;">
-                    <h6>Hasil Response (Live):</h6>
-                    <div class="code-block" style="background: #1e1e1e; max-height: 300px; overflow-y: auto;">
-                        <pre id="json-output" class="m-0"></pre>
+                <!-- Result Container (Table UI) -->
+                <div id="result-container" class="mt-4" style="display:none;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="m-0">Hasil Response (Rendered UI):</h6>
+                        <span class="badge bg-success">Status: 200 OK</span>
+                    </div>
+
+                    <div class="table-responsive shadow-sm" style="border-radius: 8px; overflow: hidden;">
+                        <table class="table table-hover mb-0" style="vertical-align: middle;">
+                            <thead style="background-color: #87CEEB; color: #000;">
+                                <tr>
+                                    <th class="py-3 ps-4">ID</th>
+                                    <th class="py-3">Nama Barang</th>
+                                    <th class="py-3">Kategori</th>
+                                    <th class="py-3">Lokasi</th>
+                                    <th class="py-3">Stok</th>
+                                    <th class="py-3 text-center">Status</th>
+                                    <th class="py-3 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body" class="bg-white">
+                                <!-- Data rows will be inserted here -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -71,24 +94,53 @@
         function fetchData() {
             const btn = document.querySelector('button[onclick="fetchData()"]');
             const container = document.getElementById('result-container');
-            const output = document.getElementById('json-output');
+            const tbody = document.getElementById('table-body');
             
             btn.disabled = true;
-            btn.innerText = 'Loading...';
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Loading...';
             
             fetch('/api/barang')
                 .then(response => response.json())
-                .then(data => {
+                .then(response => {
+                    // Reset UI
                     container.style.display = 'block';
-                    output.innerText = JSON.stringify(data, null, 2);
+                    tbody.innerHTML = '';
+                    
+                    if(response.success && response.data.length > 0) {
+                        response.data.forEach(item => {
+                            // Logic status sederhana
+                            let statusBadge = item.stok > 0 
+                                ? '<span class="badge rounded-pill bg-success bg-opacity-25 text-success border border-success">Tersedia</span>'
+                                : '<span class="badge rounded-pill bg-danger bg-opacity-25 text-danger border border-danger">Habis</span>';
+
+                            let row = `
+                                <tr>
+                                    <td class="ps-4 fw-bold text-muted">#DATA-${item.id}</td>
+                                    <td class="fw-bold">${item.nama_barang}</td>
+                                    <td>${item.kategori}</td>
+                                    <td>${item.lokasi}</td>
+                                    <td class="fw-bold">${item.stok}</td>
+                                    <td class="text-center">${statusBadge}</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-light text-primary"><i class="bi bi-eye"></i></button>
+                                        <button class="btn btn-sm btn-light text-warning"><i class="bi bi-pencil-square"></i></button>
+                                        <button class="btn btn-sm btn-light text-danger"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                            `;
+                            tbody.innerHTML += row;
+                        });
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">Tidak ada data ditemukan</td></tr>';
+                    }
+
                     btn.disabled = false;
-                    btn.innerText = 'Coba Langsung (Fetch Data)';
+                    btn.innerHTML = '<i class="bi bi-cloud-download"></i> Load Data via API';
                 })
                 .catch(error => {
-                    container.style.display = 'block';
-                    output.innerText = 'Error: ' + error;
+                    alert('Error fetch data: ' + error);
                     btn.disabled = false;
-                    btn.innerText = 'Coba Langsung (Fetch Data)';
+                    btn.innerHTML = '<i class="bi bi-cloud-download"></i> Load Data via API';
                 });
         }
         </script>

@@ -3,92 +3,139 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="mb-0">
-            <i class="bi bi-archive"></i> Data Barang
-        </h4>
-        <a href="{{ route('barang.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Tambah Barang
-        </a>
+        <div>
+            <h4 class="mb-0 fw-bold text-dark">Daftar Barang</h4>
+            <small class="text-muted">Mengelola data pengambilan via API</small>
+        </div>
+        <div class="d-flex gap-2">
+            <!-- Search bar mockup -->
+            <input type="text" class="form-control" placeholder="Cari barang..." style="width: 250px;">
+            <a href="{{ route('barang.create') }}" class="btn btn-primary d-flex align-items-center">
+                <i class="bi bi-plus-circle me-1"></i> Tambah
+            </a>
+        </div>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
+    <!-- Container Utama untuk Data API -->
     <div class="card shadow-sm border-0">
-        <div class="card-body">
-            @if($barangs->count() > 0)
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>No</th>
-                                <th>Nama Barang</th>
-                                <th>Kategori</th>
-                                <th>Stok</th>
-                                <th>Lokasi</th>
-                                <th class="text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($barangs as $index => $b)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td class="fw-semibold">{{ $b->nama_barang }}</td>
-                                <td>
-                                    <span class="badge bg-info">{{ $b->kategori }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-{{ $b->stok > 0 ? 'success' : 'danger' }}">
-                                        {{ $b->stok }}
-                                    </span>
-                                </td>
-                                <td>{{ $b->lokasi }}</td>
-                                <td>
-                                    <!-- TOMBOL AKSI: Detail, Edit, dan Hapus dengan label jelas -->
-                                    <div class="d-flex justify-content-center gap-2">
-                                        <a href="{{ route('barang.show', $b) }}" 
-                                           class="btn btn-sm btn-info text-white" 
-                                           title="Detail">
-                                            <i class="bi bi-eye me-1"></i> Detail
-                                        </a>
-                                        <a href="{{ route('barang.edit', $b) }}" 
-                                           class="btn btn-sm btn-warning text-white" 
-                                           title="Edit">
-                                            <i class="bi bi-pencil me-1"></i> Edit
-                                        </a>
-                                        <form action="{{ route('barang.destroy', $b) }}" 
-                                              method="POST" 
-                                              class="d-inline"
-                                              onsubmit="return confirm('Apakah Anda yakin ingin menghapus barang ini?');">
-                                            @csrf 
-                                            @method('DELETE')
-                                            <button type="submit" 
-                                                    class="btn btn-sm btn-danger" 
-                                                    title="Hapus">
-                                                <i class="bi bi-trash me-1"></i> Hapus
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+        <div class="card-body p-0">
+            <!-- Loading Spinner Initially -->
+            <div id="loading-spinner" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
                 </div>
-            @else
-                <div class="text-center py-5">
-                    <i class="bi bi-inbox fs-1 text-muted"></i>
-                    <p class="text-muted mt-3">Belum ada data barang. Silakan tambah barang terlebih dahulu.</p>
-                    <a href="{{ route('barang.create') }}" class="btn btn-primary">
-                        <i class="bi bi-plus-circle"></i> Tambah Barang
-                    </a>
+                <p class="mt-2 text-muted">Mengambil data dari API...</p>
+            </div>
+
+            <!-- Tabel Data -->
+            <div id="data-container" style="display:none;" class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead style="background-color: #87CEEB;">
+                        <tr>
+                            <th class="py-3 ps-4 text-nowrap">Kode Barang <i class="bi bi-funnel"></i></th>
+                            <th class="py-3 text-nowrap">Brand <i class="bi bi-funnel"></i></th>
+                            <th class="py-3 text-nowrap">Nama Barang <i class="bi bi-funnel"></i></th>
+                            <th class="py-3 text-nowrap">Kategori <i class="bi bi-funnel"></i></th>
+                            <th class="py-3 text-nowrap">Stok <i class="bi bi-funnel"></i></th>
+                            <th class="py-3 text-center text-nowrap">Status <i class="bi bi-funnel"></i></th>
+                            <th class="py-3 text-center text-nowrap">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="api-table-body" class="bg-white">
+                        <!-- Data will be injected here via JS -->
+                    </tbody>
+                </table>
+            
+                <div class="d-flex justify-content-end bg-light p-3 border-top">
+                    <!-- Pagination Mockup -->
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-secondary">Previous</button>
+                        <button class="btn btn-primary">1</button>
+                        <button class="btn btn-outline-secondary">2</button>
+                        <button class="btn btn-outline-secondary">3</button>
+                        <button class="btn btn-outline-secondary">Next</button>
+                    </div>
                 </div>
-            @endif
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    fetchDataBarang();
+});
+
+function fetchDataBarang() {
+    const url = '/api/barang'; // Endpoint API kita
+    const loading = document.getElementById('loading-spinner');
+    const container = document.getElementById('data-container');
+    const tbody = document.getElementById('api-table-body');
+
+    fetch(url)
+        .then(response => response.json())
+        .then(res => {
+            // Sembunyikan loading
+            loading.style.display = 'none';
+            container.style.display = 'block';
+
+            tbody.innerHTML = ''; // Clear existing
+
+            if(res.success && res.data.length > 0) {
+                res.data.forEach((item, index) => {
+                    // Generate Mock Brand/Kode (karena di DB belum ada)
+                    const kodeBarang = 'BRG' + String(item.id).padStart(3, '0');
+                    const mockBrand = ['AER', 'Bolde', 'Phillips', 'Unknown'][Math.floor(Math.random() * 4)];
+                    
+                    // Logic Status
+                    const statusHtml = item.stok > 10 
+                        ? '<span class="badge rounded-pill bg-success bg-opacity-25 text-success border border-success px-3">Baik</span>'
+                        : '<span class="badge rounded-pill bg-warning bg-opacity-25 text-warning border border-warning px-3">Menipis</span>';
+
+                    const row = `
+                        <tr>
+                            <td class="ps-4 fw-bold">${kodeBarang}</td>
+                            <td>${mockBrand}</td>
+                            <td class="fw-bold">${item.nama_barang}</td>
+                            <td>${item.kategori}</td>
+                            <td class="fw-bold fs-5">${item.stok}</td>
+                            <td class="text-center">${statusHtml}</td>
+                            <td class="text-center">
+                                <div class="btn-group" role="group">
+                                    <a href="/barang/${item.id}" class="btn btn-link text-dark p-1"><i class="bi bi-eye"></i></a>
+                                    <a href="/barang/${item.id}/edit" class="btn btn-link text-dark p-1"><i class="bi bi-pencil-square"></i></a>
+                                    <button onclick="deleteBarang(${item.id})" class="btn btn-link text-dark p-1"><i class="bi bi-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-5">Tidak ada data ditemukan</td></tr>';
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            loading.innerHTML = '<p class="text-danger">Gagal memuat data API.</p>';
+        });
+}
+
+function deleteBarang(id) {
+    if(confirm('Yakin ingin menghapus?')) {
+        fetch(`/api/barang/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert('Berhasil dihapus!');
+            fetchDataBarang(); // Refresh data
+        });
+    }
+}
+</script>
 @endsection
