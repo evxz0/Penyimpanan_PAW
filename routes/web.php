@@ -60,4 +60,8 @@ Route::middleware(['auth', 'role:manajer'])->group(function () {
         return view('dashboard', $data);
     })->name('manajer.dashboard');
 
-}); 
+});
+
+Route::get('/api-docs', function () {
+    return view('api_docs');
+});

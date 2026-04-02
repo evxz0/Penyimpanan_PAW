@@ -86,6 +86,33 @@
                         @enderror
                     </div>
 
+                    <div class="col-md-6">
+                        <label for="merk" class="form-label fw-semibold">Merk</label>
+                        <input type="text" 
+                               class="form-control @error('merk') is-invalid @enderror" 
+                               id="merk" 
+                               name="merk" 
+                               placeholder="Merk Barang"
+                               value="{{ old('merk', $barang->merk) }}">
+                        @error('merk')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="status" class="form-label fw-semibold">Status</label>
+                        <select class="form-select @error('status') is-invalid @enderror" 
+                                id="status" 
+                                name="status"
+                                required>
+                            <option value="baik" {{ old('status', $barang->status) == 'baik' ? 'selected' : '' }}>Baik</option>
+                            <option value="rusak" {{ old('status', $barang->status) == 'rusak' ? 'selected' : '' }}>Rusak</option>
+                        </select>
+                        @error('status')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <div class="col-12 mt-4">
                         <button type="submit" class="btn btn-primary px-4">
                             <i class="bi bi-check-circle"></i> Simpan Perubahan
